@@ -123,3 +123,7 @@ void SmartMotor::calibrate(float target) {
 int SmartMotor::speedToPower(float speed) {
     return (speed/MAX_SPEED)*PWM_MAX_VALUE;
 }
+
+void SmartMotor::write_d(float speed_target) {
+    motor.write(speedToPower(speed_target));
+}

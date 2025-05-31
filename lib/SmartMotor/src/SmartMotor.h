@@ -23,6 +23,7 @@ class SmartMotor {
     void stop();
 
     void calibrate(float target = 45.f);
+    void write_d(float speed_target) ;
 
   private:
     int speedToPower(float speed);
