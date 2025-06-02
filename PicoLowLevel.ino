@@ -45,10 +45,11 @@ void setup() {
   tuner.SetNoiseBand(1);
 
   Serial.println("== Inizio AutoTune PID ==");
-  while (tuning) {
-    input = motorTrLeft.getSpeed();  // Corretto!
+ while (tuning) {
+    input = motorTrLeft.getSpeed();
+
     if (tuner.Runtime()) {
-      output = constrain(output, -255, 255);
+      output = constrain(output, -PWM_MAX_VALUE, PWM_MAX_VALUE);
       motorTrLeft.write_d(output);
     } else {
       Kp = tuner.GetKp();
@@ -69,22 +70,5 @@ void setup() {
 }
 
 void loop() {
-  if (Serial.available()) {
-    char c = Serial.read();
-    if (c == 'u') setpoint += 10.0;
-    else if (c == 'd') setpoint -= 10.0;
-    else if (c == 's') setpoint = 0.0;
-  }
-
-  input = motorTrLeft.getSpeed();  // Corretto!
-  myPID.Compute();
-  output = constrain(output, -255, 255);
-  motorTrLeft.write_d(output);
-
-  Serial.print("RPM: ");
-  Serial.print(input);
-  Serial.print(" | Output PWM: ");
-  Serial.println(output);
-
-  delay(50);
+  delay(1000);  // Piccolo delay per evitare di saturare la CPU
 }
