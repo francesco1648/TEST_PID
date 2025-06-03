@@ -104,9 +104,9 @@ void SmartMotor::stop() {
  */
 void SmartMotor::calibrate() {
 
-    pid.setKp(0.37f);
-    pid.setKi(1.2f);
-    pid.setKd(0.1f);
+    pid.setKp(0.35f);
+    pid.setKi(1.0f);
+    pid.setKd(0.15f);
 }
 
 /**

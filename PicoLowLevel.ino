@@ -166,15 +166,7 @@ Serial1.setTX(0);
    delay(10);
   mot_6.setStatusReturnLevel(2);
 
-  // Set the operating mode to Position Control Mode (Mode 3).
-  mot_Left_1.setOperatingMode(4);
-  mot_Right_1.setOperatingMode(4);
-  
-  mot_2.setOperatingMode(4);
-  mot_3.setOperatingMode(4);
-  mot_4.setOperatingMode(4);
-  mot_5.setOperatingMode(4);
-  mot_6.setOperatingMode(4);
+
 
   delay(10);
   // Initialize a known present position for troubleshooting.
@@ -270,12 +262,7 @@ mot_6.setProfileAcceleration(ProfileAcceleration);
 
 getpositions0[0] = 1780; // Initialize positions to 0
 getpositions0[1] = 2957; // Initialize positions to 0
- dxl.setHomingOffset(getpositions); // Set homing offset to 0 for all motors
-  mot_2.setHomingOffset(2122);
-  mot_3.setHomingOffset(-1951);
-  mot_4.setHomingOffset(1159);
-  mot_5.setHomingOffset(5164);
-  mot_6.setHomingOffset(-1098);
+
 
   // Enable torque for all motors.
   dxl.setTorqueEnable(true);
@@ -288,13 +275,13 @@ getpositions0[1] = 2957; // Initialize positions to 0
   mot_6.setTorqueEnable(true);
 
 
-    getpositions0[0] = 1766 ; // Initialize positions to 0
-  getpositions0[1] = 2763; // Initialize positions to 0
-  pos0_mot_2 =4524;
-  pos0_mot_3 = -52;
-  pos0_mot_4 = 3255;
-  pos0_mot_5 = 7308;
-  pos0_mot_6 = -915; // Initialize positions to 0
+    getpositions0[0] = 3097 ; // Initialize positions to 0
+  getpositions0[1] = 702; // Initialize positions to 0
+  pos0_mot_2 =4780;
+  pos0_mot_3 = -1959;
+  pos0_mot_4 = 3172;
+  pos0_mot_5 = 7242;
+  pos0_mot_6 = -1009; // Initialize positions to 0
 
 dxl.setGoalPosition_EPCM(getpositions0);
 mot_2.setGoalPosition_EPCM(pos0_mot_2);  // Address 65, Value 1, Size 1 byte

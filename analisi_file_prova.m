@@ -2,7 +2,7 @@ close all;
 clear all;
 
 % === LETTURA FILE ===
-filename = 'file_prova.txt';
+filename = 'static_pid2.txt';
 fid = fopen(filename, 'r');
 if fid == -1
     error('Impossibile aprire il file.');
