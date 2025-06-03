@@ -102,32 +102,11 @@ void SmartMotor::stop() {
  * Only the Kp and Ki gains are computed while the Kd gain is set to 0 since it doesn't have a positive effect on controlling the motor.
  * @param target Target speed to use for calibration.
  */
-void SmartMotor::calibrate(float target) {
-    float th = target + 5.f;
-    float tl = target - 5.f;
+void SmartMotor::calibrate() {
 
-    motor.write(PWM_MAX_VALUE);
-    while(getSpeed() < th) delay(DT_ENC);
-    int t_high = millis();
-    float val_high = getSpeed();
-    motor.write(0);
-    while(getSpeed() > tl) delay(DT_ENC);
-    int t_low = millis();
-    float val_low = getSpeed();
-
-    float tu = (float)(t_low - t_high)/1000.f;
-    float amplitude = (val_high - val_low)/2.f;
-    float ku = 4.f * MAX_SPEED / (PI * amplitude);
-
-    float ti = 0.83f * tu;
-
-    float kp = 0.45f * ku * 0.1f;
-    float ki = kp / ti;
-
-    Debug.println("Motor calibration result: Kp " + String(kp) + ", Ki " + String(ki), Levels::INFO);
-
-    pid.setKp(kp);
-    pid.setKi(ki);
+    pid.setKp(0.37f);
+    pid.setKi(1.2f);
+    pid.setKd(0.1f);
 }
 
 /**
