@@ -40,7 +40,7 @@ int32_t valueToSend = 0;
 
 const uint8_t motorIDs[] = {210, 211};
 const uint8_t numMotors = sizeof(motorIDs) / sizeof(motorIDs[0]);
-
+int motor_num =1;
 int32_t pos0_mot_2 = 0;
 int32_t pos0_mot_3 = 0;
 int32_t pos0_mot_4 = 0;
@@ -126,12 +126,7 @@ void setup() {
   // initializing ADC
   analogReadResolution(12); // set precision to 12 bits, 0-4095 input
 
-  // motor initialization
-  motorTrLeft.begin();
-  motorTrRight.begin();
-
-  motorTrLeft.calibrate();
-  motorTrRight.calibrate();
+ 
 
 #if defined MODC_EE
   Serial1.setRX(1);
@@ -151,14 +146,14 @@ void setup() {
 #ifdef MODC_ARM
 Serial1.setTX(0);
   Serial1.setRX(1);
-  dxl.begin(1000000);
-  mot_Left_1.begin(1000000);
-  mot_Right_1.begin(1000000);
-  mot_2.begin(1000000);
-  mot_3.begin(1000000);
-  mot_4.begin(1000000);
-  mot_5.begin(1000000);
-  mot_6.begin(1000000);
+  dxl.begin_dxl(1000000);
+  mot_Left_1.begin_dxl(1000000);
+  mot_Right_1.begin_dxl(1000000);
+  mot_2.begin_dxl(1000000);
+  mot_3.begin_dxl(1000000);
+  mot_4.begin_dxl(1000000);
+  mot_5.begin_dxl(1000000);
+  mot_6.begin_dxl(1000000); 
 
   mot_Right_1.setTorqueEnable(false); // Disable torque for safety
   mot_Left_1.setTorqueEnable(false); // Disable torque for safety
@@ -166,7 +161,7 @@ Serial1.setTX(0);
   mot_3.setTorqueEnable(false); // Disable torque for safety
   mot_4.setTorqueEnable(false); // Disable torque for safety
   mot_5.setTorqueEnable(false); // Disable torque for safety
-  mot_6.setTorqueEnable(false);
+  mot_6.setTorqueEnable(false); 
 
    delay(10);
   mot_6.setStatusReturnLevel(2);
@@ -174,6 +169,7 @@ Serial1.setTX(0);
   // Set the operating mode to Position Control Mode (Mode 3).
   mot_Left_1.setOperatingMode(4);
   mot_Right_1.setOperatingMode(4);
+  
   mot_2.setOperatingMode(4);
   mot_3.setOperatingMode(4);
   mot_4.setOperatingMode(4);
@@ -192,6 +188,11 @@ Serial1.setTX(0);
   // Enable or disable debug mode for troubleshooting
   mot_Left_1.setDebug(false);
   mot_Right_1.setDebug(false);
+  mot_2.setDebug(false);
+  mot_3.setDebug(false);
+  mot_4.setDebug(false);
+  mot_5.setDebug(false);
+  mot_6.setDebug(false);
   dxl.setDebug(false);
 
   // Factory Reset and Reboot
@@ -229,13 +230,13 @@ Serial1.setTX(0);
   //dxl.setHomingOffset(homingOffset);
 
   // Enable torque for both motors.
- /* dxl.setTorqueEnable(true);
+ dxl.setTorqueEnable(true);
  mot_2.setTorqueEnable(true);
   mot_3.setTorqueEnable(true);
   mot_4.setTorqueEnable(true);
   mot_5.setTorqueEnable(true);
   mot_6.setTorqueEnable(true);
- */
+
 /*
 mot1a 1780  mot1b 2957
 mot2 2122
@@ -267,14 +268,14 @@ mot_6.setProfileAcceleration(ProfileAcceleration);
 
 
 
-/*getpositions0[0] = 1780; // Initialize positions to 0
+getpositions0[0] = 1780; // Initialize positions to 0
 getpositions0[1] = 2957; // Initialize positions to 0
  dxl.setHomingOffset(getpositions); // Set homing offset to 0 for all motors
   mot_2.setHomingOffset(2122);
   mot_3.setHomingOffset(-1951);
   mot_4.setHomingOffset(1159);
   mot_5.setHomingOffset(5164);
-  mot_6.setHomingOffset(-1098);*/
+  mot_6.setHomingOffset(-1098);
 
   // Enable torque for all motors.
   dxl.setTorqueEnable(true);
@@ -301,7 +302,14 @@ mot_3.setGoalPosition_EPCM(pos0_mot_3);  // Address 65, Value 1, Size 1 byte
 mot_4.setGoalPosition_EPCM(pos0_mot_4);  // Address 65, Value 1, Size 1 byte
 mot_5.setGoalPosition_EPCM(pos0_mot_5);  // Address 65, Value 1, Size 1 byte
 mot_6.setGoalPosition_EPCM(pos0_mot_6);  // Address 65, Value 1, Size 1 byte
+
 #endif
+ // motor initialization
+  motorTrLeft.begin();
+  motorTrRight.begin();
+
+  motorTrLeft.calibrate();
+  motorTrRight.calibrate();
   // Display initialization
   display.begin();
 
@@ -317,11 +325,9 @@ void loop() {
   int time_cur = millis();
   uint8_t msg_id;
   byte msg_data[8];
-
-  // update motors
-   Serial.print("\tMOTOR_LEFT\t");
+motor_num=1;
   motorTrLeft.update();
-  Serial.print("\tMOTOR_RIGHT\t");
+ motor_num=2;
   motorTrRight.update();
 
   // health checks
@@ -342,21 +348,23 @@ void loop() {
   }
 
   if (canW.readMessage(&msg_id, msg_data)) {
-
+    Serial.println("Received CAN message with ID: ");
     // Received CAN message with setpoint
     time_data = time_cur;
     handleSetpoint(msg_id, msg_data);
   } else if (time_cur - time_data > CAN_TIMEOUT && time_data != -1) {
     //if we do not receive data for more than a second stop motors
     time_data = -1;
-    Debug.println("Stopping motors after timeout.", Levels::INFO);
+    Serial.println("Stopping motors after timeout.");
     Serial.print("\tMOTOR_LEFT\t");
     motorTrLeft.stop();
     Serial.print("\tMOTOR_RIGHT\t");
     motorTrRight.stop();
+  } else {
+  
+  
   }
-Serial.print(" \tmillis\t");
-  Serial.println(millis());
+
   //wm.handle();
   display.handleGUI();
 }
@@ -376,9 +384,13 @@ void handleSetpoint(uint8_t msg_id, const byte *msg_data)
   switch (msg_id)
   {
   case MOTOR_SETPOINT:
+
     float leftSpeed, rightSpeed;
+
+
     memcpy(&leftSpeed, msg_data, 4);
     memcpy(&rightSpeed, msg_data + 4, 4);
+       
     motorTrLeft.setSpeed(leftSpeed);
     motorTrRight.setSpeed(rightSpeed);
 

@@ -67,7 +67,7 @@ public:
      * @brief Initializes the Dynamixel interface.
      * @param baudrate The baud rate (default is 57600).
      */
-    void begin(long baudrate = 57600);
+    void begin_dxl(long baudrate = 57600);
 
     /**
      * @brief Turns off the servo LED.

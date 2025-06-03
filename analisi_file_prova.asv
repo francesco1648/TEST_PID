@@ -111,7 +111,6 @@ function plotReferenceSpeedAnalog(data, motore)
     ref = data.getReferenceValue;
     speed = data.getSpeed;
     pwm = data.analogWrite;
-    mg=data.digitalWrite;
 
     validi = ~isnan(ref) & ~isnan(speed) & ~isnan(pwm);
 
@@ -121,7 +120,7 @@ function plotReferenceSpeedAnalog(data, motore)
         hold on;
         plot(tempo(validi), speed(validi), 'b--', 'LineWidth', 1.5, 'DisplayName', 'getSpeed');
         plot(tempo(validi), pwm(validi), 'r:', 'LineWidth', 1.5, 'DisplayName', 'analogWrite');
-       plot(tempo(validi), mg(validi)*60,  'LineWidth', 1.5, 'DisplayName', 'digitalWrite');
+       plot(tempo(validi), pwm(validi), 'r:', 'LineWidth', 1.5, 'DisplayName', 'digitalWrite');
        
         title([motore ' - Reference vs Speed vs analogWrite'], 'Interpreter', 'none');
         xlabel('tempo (ms)');

@@ -1,6 +1,7 @@
+#line 1 "C:\\Users\\PC1\\Desktop\\ISAAC\\test_pid\\PicoLowLevel\\lib\\SmartMotor\\src\\SmartMotor.cpp"
 #include "SmartMotor.h"
 int pr = 0;
-
+extern int motor_num;
 /**
  * Create SmartMotor object, creating all necessary objects.
  * @param pwm PWM pin.
@@ -32,6 +33,21 @@ void SmartMotor::begin() {
 void SmartMotor::update() {
     unsigned long now = millis();
     if(now - pid_last > DT_PID) {
+        if(motor_num==1) {
+        Serial.print(" \tmillis\t");
+  Serial.print(millis());
+
+  // update motors
+   Serial.print("\tMOTOR_LEFT\t");
+    } else if(motor_num==2) {
+        Serial.print(" \tmillis\t");
+  Serial.print(millis());
+
+  // update motors
+   Serial.print("\tMOTOR_RIGHT\t");
+}
+        Serial.print("\tgetReferenceValue\t");
+        Serial.print(pid.getReferenceValue());
         Serial.print("\tgetSpeed\t");
         Serial.print(getSpeed());
         pid.updateFeedback(getSpeed());
@@ -42,7 +58,7 @@ void SmartMotor::update() {
         Serial.print("\tspeedtoPower\t");
        // Serial.print(pr);
        // pr++;
-        Serial.print(speedToPower(pid.getOutput()));
+        Serial.println(speedToPower(pid.getOutput()));
         pid_last = now;
     }
 }

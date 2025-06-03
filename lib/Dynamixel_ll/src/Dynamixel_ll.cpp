@@ -13,7 +13,7 @@ DynamixelLL::~DynamixelLL()
     }
 }
 
-void DynamixelLL::begin(long baudrate)
+void DynamixelLL::begin_dxl(long baudrate)
 {
     _serial.begin(baudrate);
     delay(time_delay); // Attendi che la seriale si stabilizzi
