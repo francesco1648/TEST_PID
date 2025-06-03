@@ -23,12 +23,23 @@ void Motor::begin() {
  * @param value Speed of the motor, ranging from 0 to maximum PWM value.
  */
 void Motor::write(int value) {
+  int sign = (value < 0) ? -1 : (value > 0 ? 1 : 0);
   int mot = constrain(abs(value), 0, PWM_MAX_VALUE);
+
+  const int MIN_PWM = 50; // sotto questo valore il motore non si muove
+
+  // Se c'è segnale e siamo sotto la soglia, alza al minimo efficace
+  if (mot > 0 && mot < MIN_PWM){
+mot = 0;
+  }
+
+
   analogWrite(pwm, mot);
-  digitalWrite(dir, invert ^ (value < 0));
+  digitalWrite(dir, invert ^ (sign < 0));
+
   Serial.print("\tanalogWrite\t");
   Serial.print(mot);
   Serial.print("\tdigitalWrite\t");
-  Serial.print(invert ^ (value < 0) );
-
+  Serial.print(invert ^ (sign < 0));
 }
+

@@ -20,8 +20,8 @@ SUCCESS_SYMBOL = " Compilation completed successfully! "
 ERROR_SYMBOL = " Compilation error! "
 COMPILATION_SYMBOL = " Compilation in progress... "
 
-MODULE_DEFINE ?= "MK2_MOD2"
-DESTINATION ?=  'D:\'
+MODULE_DEFINE ?= "MK2_MOD1"
+DESTINATION ?=  'E:\'
 
 MODULE =
 define print_green

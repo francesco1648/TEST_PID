@@ -126,7 +126,7 @@ void setup() {
   // initializing ADC
   analogReadResolution(12); // set precision to 12 bits, 0-4095 input
 
- 
+
 
 #if defined MODC_EE
   Serial1.setRX(1);
@@ -153,7 +153,7 @@ Serial1.setTX(0);
   mot_3.begin_dxl(1000000);
   mot_4.begin_dxl(1000000);
   mot_5.begin_dxl(1000000);
-  mot_6.begin_dxl(1000000); 
+  mot_6.begin_dxl(1000000);
 
   mot_Right_1.setTorqueEnable(false); // Disable torque for safety
   mot_Left_1.setTorqueEnable(false); // Disable torque for safety
@@ -161,7 +161,7 @@ Serial1.setTX(0);
   mot_3.setTorqueEnable(false); // Disable torque for safety
   mot_4.setTorqueEnable(false); // Disable torque for safety
   mot_5.setTorqueEnable(false); // Disable torque for safety
-  mot_6.setTorqueEnable(false); 
+  mot_6.setTorqueEnable(false);
 
    delay(10);
   mot_6.setStatusReturnLevel(2);
@@ -275,12 +275,12 @@ getpositions0[1] = 2957; // Initialize positions to 0
   mot_6.setTorqueEnable(true);
 
 
-    getpositions0[0] = 3097 ; // Initialize positions to 0
-  getpositions0[1] = 702; // Initialize positions to 0
-  pos0_mot_2 =4780;
-  pos0_mot_3 = -1959;
-  pos0_mot_4 = 3172;
-  pos0_mot_5 = 7242;
+    getpositions0[0] = 2695 ; // Initialize positions to 0
+  getpositions0[1] = 813; // Initialize positions to 0
+  pos0_mot_2 =4851;
+  pos0_mot_3 = -1895;
+  pos0_mot_4 = 3209;
+  pos0_mot_5 = 7181;
   pos0_mot_6 = -1009; // Initialize positions to 0
 
 dxl.setGoalPosition_EPCM(getpositions0);
@@ -348,8 +348,8 @@ motor_num=1;
     Serial.print("\tMOTOR_RIGHT\t");
     motorTrRight.stop();
   } else {
-  
-  
+
+
   }
 
   //wm.handle();
@@ -377,7 +377,7 @@ void handleSetpoint(uint8_t msg_id, const byte *msg_data)
 
     memcpy(&leftSpeed, msg_data, 4);
     memcpy(&rightSpeed, msg_data + 4, 4);
-       
+
     motorTrLeft.setSpeed(leftSpeed);
     motorTrRight.setSpeed(rightSpeed);
 
