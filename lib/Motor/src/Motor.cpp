@@ -23,12 +23,34 @@ void Motor::begin() {
  * @param value Speed of the motor, ranging from 0 to maximum PWM value.
  */
 void Motor::write(int value) {
-  int mot = constrain(abs(value), 0, PWM_MAX_VALUE);
+  static float filtered_value = 0;  // persiste tra le chiamate
+
+  // Parametro di filtro: 0.0 = filtro forte, 1.0 = nessun filtro
+  const float alpha = 0.2;
+
+  // Applica filtro sull'ingresso
+  filtered_value = alpha * value + (1.0 - alpha) * filtered_value;
+
+
+
+
+  // Estrai direzione e modulo
+  int sign = (filtered_value < 0) ? -1 : (filtered_value > 0 ? 1 : 0);
+  int mot = constrain(abs((int)filtered_value), 0, PWM_MAX_VALUE);
+
+  const int MIN_PWM = 50;
+
+  if (mot > 0 && mot < MIN_PWM) {
+    mot = 0;
+  }
+
   analogWrite(pwm, mot);
-  digitalWrite(dir, invert ^ (value < 0));
+  digitalWrite(dir, invert ^ (sign < 0));
+
   Serial.print("\tanalogWrite\t");
   Serial.print(mot);
   Serial.print("\tdigitalWrite\t");
-  Serial.print(invert ^ (value < 0) );
-
+  Serial.print(invert ^ (sign < 0));
 }
+
+
